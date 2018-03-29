@@ -1,0 +1,47 @@
+#as user
+ansible -m shell -a 'free -m' [HOSTGRUPPE]
+#change to root
+ansible --su --su-user=root --ask-su-pass -m shell -a 'free -m' [HOSTGRUPPE]
+
+
+###runbook with user escallation
+---
+- hosts: [HOSTGRUPPE]
+  user: [USER]
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+    - shell: free -m
+#für output der shell eingabe (geht auch beim aufruf des skript mit -vv)
+#      register: ps
+#    - debug: var=ps.stdout_lines
+###
+#nach sudo passwort für skript oben fragen
+ansible-playbook playbook1.yml --ask-become-pass
+
+https://github.com/MrJuliuss/debian-playbooks
+---- untested
+---
+- hosts: [HOSTGRUPPE]
+  user: [USER]
+  become: yes
+  become_user: root
+  become_method: su
+  tasks:
+
+- name: Upgrade distribution
+  apt: update_cache=yes upgrade=yes cache_valid_time=1800
+
+- name: Install packages
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - vim
+    - fail2ban
+    - ntp
+
+- name: Restart ntp client
+  action: service name=ntp state=restarted enabled=yes
+
+- name: Stop Bluetooth
+  action: service name=bluetooth state=stop enabled=no
