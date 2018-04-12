@@ -1,4 +1,4 @@
-- hosts: [HOSTGRUPPE]
+- hosts: ssh_group
   user: [USER]
   become: yes
   become_user: root
