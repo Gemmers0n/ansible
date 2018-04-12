@@ -1,0 +1,8 @@
+- name: Modify SSH-Config
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PubkeyAuthentication'
+    line: 'PubkeyAuthentication yes'
+    owner: root
+    group: root
+    mode: 0400
