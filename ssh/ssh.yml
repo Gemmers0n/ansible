@@ -1,0 +1,7 @@
+- hosts: [HOSTGRUPPE]
+  user: [USER]
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+  - include: roles/ssh/tasks/ssh_config.yml
