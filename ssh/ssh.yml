@@ -4,4 +4,4 @@
   become_user: root
   become_method: sudo
   tasks:
-  - include: roles/ssh/tasks/ssh_config.yml
+  - import_tasks: roles/ssh/tasks/ssh_config.yml
