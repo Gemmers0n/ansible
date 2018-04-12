@@ -27,6 +27,15 @@ ansible-playbook playbook1.yml --ask-become-pass
     - ntp
     - unattended-upgrades
     - apt-listchanges
+    
+- name: Modify SSH-Config
+  - lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '^PubkeyAuthentication'
+      line: 'PubkeyAuthentication yes'
+      owner: root
+      group: root
+      mode: 0400
 
 - name: Restart ntp client
   action: service name=ntp state=restarted enabled=yes
