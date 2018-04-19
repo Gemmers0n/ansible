@@ -1,8 +1,11 @@
 - name: Modify SSH-Config
   lineinfile:
     path: /etc/ssh/sshd_config
-    regexp: '^PubkeyAuthentication'
-    line: 'PubkeyAuthentication yes'
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
     owner: root
     group: root
-    mode: 0400
+    mode: 0600
+  with_items:
+    - { regexp: '^PermitRootLogin', line: 'PermitRootLogin no' }
+    - { regexp: '^PubkeyAuthentication', line: 'PubkeyAuthentication yes' }
