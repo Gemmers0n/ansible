@@ -9,3 +9,4 @@
   with_items:
     - { regexp: '^PermitRootLogin', line: 'PermitRootLogin no' }
     - { regexp: '^PubkeyAuthentication', line: 'PubkeyAuthentication yes' }
+    - { regexp: '^UsePAM', line: 'UsePAM no' }
