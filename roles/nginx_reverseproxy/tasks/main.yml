@@ -1,0 +1,43 @@
+---
+- name: load vars
+  include_vars:
+    file: urls.yml
+    name: urls
+
+- name: debug
+  debug: msg={{urls}}
+
+- name: debug2
+  debug: msg={{ urls['url_s'] }}
+
+
+- name: create vhosts
+  template:
+    src: vhost_reverseproxy.j2
+    dest: "/etc/nginx/sites-available/{{ item }}.vhost"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+  with_items: "{{ urls['url_s'] }}"
+
+- name: customize source url
+  replace:
+    dest: "/etc/nginx/sites-available/{{ item }}.vhost"
+    regexp: 'URL_SOURCE'
+    replace: "{{ urls['url_s'] }}"
+  with_items: "{{ urls['url_s'] }}"
+
+- name: customize destination url
+  replace:
+    dest: "/etc/nginx/sites-available/{{ item }}.vhost"
+    regexp: 'URL_DESTINATION'
+    replace: "{{ urls['url_d'] }}"
+  with_items: "{{ urls['url_s'] }}"
+
+- name: Create symbolic link for vhost
+  file:
+    src: "/etc/nginx/sites-available/{{ item }}.vhost"
+    dest: "/etc/nginx/sites-enabled/{{ item }}.vhost"
+    state: link
+  with_items: "{{ urls['url_s'] }}"

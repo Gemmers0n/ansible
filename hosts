@@ -44,3 +44,6 @@
 
 [testservers]
 127.0.0.1
+
+[tor]
+HOSTNAME.onion

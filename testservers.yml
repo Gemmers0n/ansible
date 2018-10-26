@@ -5,6 +5,7 @@
   become_method: su
   become_flags: '-s /bin/sh'
   roles:
-    - sysconfig
-    - ssh
-    - nginx
+#    - sysconfig
+#    - ssh
+#    - nginx
+    - nginx_reverseproxy
