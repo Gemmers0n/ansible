@@ -2,17 +2,17 @@
 
 Ansible Runbooks for various components
 
-Ansible Version: 2.2.1.0-2
-needed Packages: 
-    python-apt (python 2)
-    python3-apt (python 3)
-    aptitude (before 2.4)
+Ansible Version: 2.7.6.1-2
 
+sudo echo 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main' > /etc/apt/sources.list.d/ansible.list
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
+sudo apt-get update
+sudo apt-get install ansible python3-apt sshpass -y
 
-execute: ansible-playbook testservers.yml --ask-become-pass
 
 #as user
 ansible -m shell -a 'free -m' testservers
 #change to root
 ansible --su --su-user=root --ask-su-pass -m shell -a 'free -m' testservers
-
+#playbook run
+ansible-playbook testservers.yml --ask-become-pass --ask-pass

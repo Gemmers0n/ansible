@@ -1,0 +1,9 @@
+---
+- hosts: raspberrypi
+  gather_facts: False
+  become: yes
+  become_user: root
+  become_method: sudo
+  become_flags: '-s /bin/sh'
+  roles:
+    - raspi_user_default

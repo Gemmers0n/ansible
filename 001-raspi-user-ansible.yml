@@ -1,0 +1,18 @@
+---
+- hosts: raspberrypi
+  vars:
+  - ansible_ssh_user: "{{ ssh_user }}"
+  - ansible_ssh_pass: "{{ ssh_pass }}"
+  vars_prompt:
+    - name: "ssh_user"
+      prompt: "Which user to connect?"
+      private: no
+    - name: "ssh_pass"
+      prompt: "Which password to connect?"
+      private: yes
+  gather_facts: False
+  become: yes
+  become_user: root
+  become_method: sudo
+  roles:
+    - raspi_user_ansible

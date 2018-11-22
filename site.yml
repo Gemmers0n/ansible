@@ -1,3 +1,2 @@
 ---
-# supported in versions >= 2.4 not applicable to current repo
-- import_playbook: testservers.yml
+- import_playbook: 001-raspi-user-ansible.yml
