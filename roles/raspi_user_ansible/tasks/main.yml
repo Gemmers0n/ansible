@@ -1,0 +1,35 @@
+---
+- name: load vars
+  include_vars:
+    file: password.yml
+    name: password_ansible
+
+- name: Create Ansible User
+  user:
+    name: ansible
+    password: "{{ password_ansible['password'] }}"
+    create_home: yes
+    skeleton: "/etc/skel"
+    shell: "/bin/bash"
+    groups: sudo
+    append: yes
+
+- name: Set authorized key took from file
+  authorized_key:
+    user: ansible
+    state: present
+    key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+
+- name: Enable Key Authentication
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#?PubkeyAuthentication'
+    line: "PubkeyAuthentication yes"
+    state: present
+  register: sshd_config
+
+- name: Restart ssh
+  shell: sleep 3; systemctl restart sshd
+  async: 1
+  poll: 0
+  when: sshd_config is changed

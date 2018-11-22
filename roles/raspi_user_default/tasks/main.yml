@@ -1,0 +1,18 @@
+---
+- name: load vars
+#  vars_prompt:
+#    - name: "new_user"
+#      prompt: "Which userto move?"
+#      private: no
+
+  include_vars:
+    file: username.yml
+    name: username
+
+- name: Modify Default User
+  user:
+    name: pi
+    group: pi
+    home: /home/pi
+    move_home: /home/{{ username['username'] }}
+#    move_home: /home/{{ new_user }}
