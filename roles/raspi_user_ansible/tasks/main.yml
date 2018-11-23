@@ -4,15 +4,20 @@
     file: password.yml
     name: password_ansible
 
-- name: Create Ansible User
+- name: Create ansible user
   user:
     name: ansible
-    password: "{{ password_ansible['password'] }}"
+    password: "{{ password_ansible['ansible_pass'] }}"
     create_home: yes
     skeleton: "/etc/skel"
     shell: "/bin/bash"
     groups: sudo
     append: yes
+
+- name: Modify root
+  user:
+    name: root
+    password: "{{ password_ansible['root_pass'] }}"
 
 - name: Set authorized key took from file
   authorized_key:
@@ -33,3 +38,9 @@
   async: 1
   poll: 0
   when: sshd_config is changed
+
+- name: Delete sudo all all
+  lineinfile: 
+    dest: /etc/sudoers
+    regexp: '^%sudo'
+    state: absent

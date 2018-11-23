@@ -1,5 +1,11 @@
 ---
 - hosts: raspberrypi
+  tasks:
+  - name: Check user
+    command: grep "pi:x:1000" /etc/passwd
+    register: user_available
+    ignore_errors: true
+
   vars:
   - ansible_ssh_user: "{{ ssh_user }}"
   - ansible_ssh_pass: "{{ ssh_pass }}"
@@ -14,5 +20,6 @@
   become: yes
   become_user: root
   become_method: sudo
+  ignore_unreachable: yes
   roles:
     - raspi_user_ansible

@@ -1,2 +1,4 @@
 ---
 - import_playbook: 001-raspi-user-ansible.yml
+- import_playbook: 002-raspi-user-default.yml
+- import_playbook: ssh.yml
