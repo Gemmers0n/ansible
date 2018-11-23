@@ -4,15 +4,44 @@
 #    - name: "new_user"
 #      prompt: "Which userto move?"
 #      private: no
-
   include_vars:
-    file: username.yml
-    name: username
+    file: user.yml
+    name: user
 
-- name: Modify Default User
+- name: Check home
+  command: ls /home/pi
+  register: home_available
+  ignore_errors: true
+
+- name: Check user
+  command: grep "pi:x:1000" /etc/passwd
+  register: user_available
+  ignore_errors: true
+
+- name: Check group
+  command: grep "pi:x:1000" /etc/group
+  register: group_available
+  ignore_errors: true
+
+- name: Change home to {{ user['username'] }}
   user:
     name: pi
     group: pi
-    home: /home/pi
-    move_home: /home/{{ username['username'] }}
-#    move_home: /home/{{ new_user }}
+    home: "/home/{{ user['username'] }}"
+    move_home: yes
+  when: home_available is succeeded
+
+- name: Change user to {{ user['username'] }}
+  shell: usermod --login {{ user['username'] }} pi
+  when: user_available is succeeded
+
+- name: Change group to {{ user['username'] }}
+  shell: groupmod --new-name {{ user['username'] }} pi
+  when: group_available is succeeded
+
+- name: Set authorized key took from file
+  authorized_key:
+    user: "{{ user['username'] }}"
+    state: present
+    key: "{{ user['publickey'] }}"
+

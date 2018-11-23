@@ -11,4 +11,4 @@
   become_user: root
   become_method: su
   roles:
-    - raspi_user_default
+    - ssh
