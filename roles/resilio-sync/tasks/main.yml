@@ -1,0 +1,26 @@
+---
+- name: Add apt architecture
+  shell: dpkg --add-architecture armhf
+
+- name: Create resilio-sync repo
+  apt_repository:
+    repo: deb [arch=armhf] http://linux-packages.resilio.com/resilio-sync/deb resilio-sync non-free
+    state: present
+    filename: resilio-sync
+    update_cache: yes
+
+- name: Add resilio-sync key
+  apt_key:
+    url: https://linux-packages.resilio.com/resilio-sync/key.asc
+    state: present
+
+- name: install resilio-sync
+  package:
+    name: resilio-sync
+    state: present
+
+- name: Make sure a service resilio-sync is running
+  systemd:
+    state: started
+    name: resilio-sync
+    enabled: yes

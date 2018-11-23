@@ -1,0 +1,14 @@
+---
+- hosts: raspberrypi
+  vars:
+  - ansible_become_pass: "{{ sudo_pass }}"
+  vars_prompt:
+    - name: "sudo_pass"
+      prompt: "Give sudo password"
+      private: yes
+  gather_facts: False
+  become: yes
+  become_user: root
+  become_method: su
+  roles:
+    - resilio-sync
