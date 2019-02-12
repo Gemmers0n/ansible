@@ -1,15 +1,16 @@
 ---
 - name: Upgrade distribution
-  apt: update_cache=yes upgrade=yes cache_valid_time=1800
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+    upgrade: dist
+    autoclean: yes
+    autoremove: yes
 
 - name: Install packages
-  apt: pkg={{ item }} state=latest
-  with_items:
-    - vim
-    - fail2ban
-    - ntp
-    - unattended-upgrades
-    - apt-listchanges
+  apt: 
+    name: ['fail2ban', 'ntp'] 
+    state: latest
     
 - name: Start ntp client
   action: service name=ntp state=started enabled=yes

@@ -3,3 +3,4 @@
 - import_playbook: 002-user-default.yml
 - import_playbook: 003-ssh.yml
 - import_playbook: 004-unattended-upgrades.yml
+- import_playbook: 005-sysconfig.yml
