@@ -1,6 +1,3 @@
 ---
-- import_playbook: 001-user-ansible.yml
-- import_playbook: 002-user-default.yml
-- import_playbook: 003-ssh.yml
-- import_playbook: 004-unattended-upgrades.yml
-- import_playbook: 005-sysconfig.yml
+- import_playbook: hosts-debian-install.yml
+- import_playbook: hosts-debian.yml

@@ -11,4 +11,7 @@
   become_user: root
   become_method: su
   roles:
+    - user-default
+    - ssh
     - unattended-upgrades
+    - sysconfig

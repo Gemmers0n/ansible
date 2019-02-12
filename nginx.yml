@@ -1,8 +1,0 @@
----
-- hosts: nginx
-  become: yes
-  become_user: root
-  become_method: su
-  become_flags: '-s /bin/sh'
-  roles:
-    - nginx_reverseproxy
