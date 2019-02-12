@@ -1,11 +1,14 @@
+[debian_install]
+#35.246.225.59
+#18.195.145.115
+
+[debian]
+35.246.225.59
+18.195.145.115
+
 [nginx]
-127.0.0.1
+
 
 [tor]
-HOSTNAME.onion
+#HOSTNAME.onion
 
-[raspberrypi]
-192.168.0.193
-
-[google]
-35.246.225.59

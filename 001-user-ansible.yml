@@ -1,25 +1,25 @@
 ---
-- hosts: raspberrypi
-  tasks:
-  - name: Check user
-    command: grep "pi:x:1000" /etc/passwd
-    register: user_available
-    ignore_errors: true
-
+- hosts: debian_install
   vars:
   - ansible_ssh_user: "{{ ssh_user }}"
   - ansible_ssh_pass: "{{ ssh_pass }}"
   vars_prompt:
     - name: "ssh_user"
-      prompt: "Which user to connect?"
+      prompt: "Connect user"
       private: no
     - name: "ssh_pass"
-      prompt: "Which password to connect?"
+      prompt: "Connect password"
       private: yes
+
+  tasks:
+  - name: Check user
+    command: grep "{{ ssh_user }}:x:1000" /etc/passwd
+    register: user_available
+    ignore_errors: true
   gather_facts: False
   become: yes
   become_user: root
   become_method: sudo
   ignore_unreachable: yes
   roles:
-    - raspi_user_ansible
+    - user-ansible
