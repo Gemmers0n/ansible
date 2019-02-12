@@ -1,5 +1,5 @@
 ---
-- hosts: debian_install
+- hosts: debian-install
   vars:
   - ansible_ssh_user: "{{ ssh_user }}"
   - ansible_ssh_pass: "{{ ssh_pass }}"
@@ -13,7 +13,7 @@
 
   tasks:
   - name: Check user
-    command: grep "{{ ssh_user }}:x:1000" /etc/passwd
+    command: grep "{{ ssh_user }}" /etc/passwd
     register: user_available
     ignore_errors: true
   gather_facts: False
