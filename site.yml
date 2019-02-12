@@ -1,4 +1,5 @@
 ---
-- import_playbook: 001-raspi-user-ansible.yml
-- import_playbook: 002-raspi-user-default.yml
-- import_playbook: ssh.yml
+- import_playbook: 001-user-ansible.yml
+- import_playbook: 002-user-default.yml
+- import_playbook: 003-ssh.yml
+- import_playbook: 004-unattended-upgrades.yml

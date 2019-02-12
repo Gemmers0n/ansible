@@ -1,5 +1,5 @@
 ---
-- hosts: raspberrypi
+- hosts: debian
   vars:
   - ansible_become_pass: "{{ sudo_pass }}"
   vars_prompt:

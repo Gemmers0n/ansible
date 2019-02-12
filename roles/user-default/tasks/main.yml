@@ -8,35 +8,43 @@
     file: user.yml
     name: user
 
+- name: Get user
+  shell: 'id -nu 1000'
+  register: user_old
+
+- name: debug
+  debug:
+    msg: "User: {{ user_old.stdout }}"
+
 - name: Check home
-  command: ls /home/pi
+  command: ls /home/"{{ user_old.stdout }}"
   register: home_available
   ignore_errors: true
 
 - name: Check user
-  command: grep "pi:x:1000" /etc/passwd
+  command: grep "{{ user_old.stdout }}" /etc/passwd
   register: user_available
   ignore_errors: true
 
 - name: Check group
-  command: grep "pi:x:1000" /etc/group
+  command: grep "{{ user_old.stdout }}" /etc/group
   register: group_available
   ignore_errors: true
 
 - name: Change home to {{ user['username'] }}
   user:
-    name: pi
-    group: pi
+    name: "{{ user_old.stdout }}"
+    group: "{{ user_old.stdout }}"
     home: "/home/{{ user['username'] }}"
     move_home: yes
   when: home_available is succeeded
 
 - name: Change user to {{ user['username'] }}
-  shell: usermod --login {{ user['username'] }} pi
+  shell: usermod --login {{ user['username'] }} {{ user_old.stdout }}
   when: user_available is succeeded
 
 - name: Change group to {{ user['username'] }}
-  shell: groupmod --new-name {{ user['username'] }} pi
+  shell: groupmod --new-name {{ user['username'] }} {{ user_old.stdout }}
   when: group_available is succeeded
 
 - name: Set authorized key took from file
@@ -44,4 +52,3 @@
     user: "{{ user['username'] }}"
     state: present
     key: "{{ user['publickey'] }}"
-
