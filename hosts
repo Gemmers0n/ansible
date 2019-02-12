@@ -6,3 +6,6 @@ HOSTNAME.onion
 
 [raspberrypi]
 192.168.0.193
+
+[google]
+35.246.225.59
