@@ -6,7 +6,7 @@
     - name: "sudo_pass"
       prompt: "Give sudo password"
       private: yes
-  gather_facts: False
+  gather_facts: true
   become: yes
   become_user: root
   become_method: su
@@ -15,3 +15,5 @@
     - ssh
     - unattended-upgrades
     - sysconfig
+    - docker
+    - tor

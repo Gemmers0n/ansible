@@ -7,6 +7,13 @@
     mode: '0600'
     validate: /usr/sbin/sshd -t -f %s
     backup: yes
+  notify: 
+    - restart ssh
+  tags: ssh
 
-- name: Reload ssh config
-  action: service name=ssh state=restarted enabled=yes
+- name: be sure ssh is running and enabled
+  service:
+    name: ssh
+    state: started
+    enabled: yes
+  tags: ssh
