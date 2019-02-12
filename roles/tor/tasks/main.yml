@@ -1,0 +1,29 @@
+---
+- name: Install packages
+  apt:
+    name: ['tor']
+    state: latest
+
+- name: Create directory
+  file:
+    path: /var/lib/tor/hidden_service
+    state: directory
+    owner: debian-tor
+    group: debian-tor
+    mode: 0700
+    
+- name: Modify tor-Config
+  template:
+    src: torrc.j2
+    dest: /etc/tor/torrc
+    backup: yes
+  notify:
+    - restart tor
+  tags: tor
+
+- name: be sure tor is running and enabled
+  service:
+    name: tor
+    state: started
+    enabled: yes
+  tags: tor

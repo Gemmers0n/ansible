@@ -16,7 +16,7 @@
     command: grep "{{ ssh_user }}" /etc/passwd
     register: user_available
     ignore_errors: true
-  gather_facts: False
+  gather_facts: true
   become: yes
   become_user: root
   become_method: sudo

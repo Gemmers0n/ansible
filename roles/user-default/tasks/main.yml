@@ -1,9 +1,5 @@
 ---
 - name: load vars
-#  vars_prompt:
-#    - name: "new_user"
-#      prompt: "Which userto move?"
-#      private: no
   include_vars:
     file: user.yml
     name: user
@@ -12,9 +8,9 @@
   shell: 'id -nu 1000'
   register: user_old
 
-- name: debug
-  debug:
-    msg: "User: {{ user_old.stdout }}"
+#- name: debug
+#  debug:
+#    msg: "User: {{ user_old.stdout }}"
 
 - name: Check home
   command: ls /home/"{{ user_old.stdout }}"
@@ -31,7 +27,7 @@
   register: group_available
   ignore_errors: true
 
-- name: Change home to {{ user['username'] }}
+- name: Change home for {{ user['username'] }}
   user:
     name: "{{ user_old.stdout }}"
     group: "{{ user_old.stdout }}"
