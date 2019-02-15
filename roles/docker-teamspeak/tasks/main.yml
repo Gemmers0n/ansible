@@ -1,0 +1,22 @@
+- name: create dir
+  file:
+    path: /docker/teamspeak
+    state: directory
+    mode: 0700
+
+- name: Modify Docker Stack Teamspeak
+  template:
+    src: stack_teamspeak.yml.j2
+    dest: /docker/stack_teamspeak.yml
+    owner: root
+    group: root
+    mode: '0600'
+    backup: yes
+
+#- name: Map container folder##TODO if not already in use
+#  shell: docker run --name some-teamspeak -v /docker/teamspeak:/var/ts3server/ -d teamspeak
+#  changed_when: false
+
+- name: Start Docker Stack Teamspeak
+  shell: docker stack deploy -c /docker/stack_teamspeak.yml teamspeak
+  changed_when: false
