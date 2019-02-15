@@ -9,8 +9,35 @@
     url: https://download.docker.com/linux/debian/gpg
     state: present
 
+- name: Register debian_ver
+  shell: lsb_release -cs
+  register: debian_ver
+  changed_when: false
+
+- name: Set debian release for docker
+  set_fact:
+    debian_release: "{{ debian_ver.stdout_lines }}"
+
+#- name: Display all variables/facts known for a host
+#  debug:
+#    var: hostvars[inventory_hostname]
+#    verbosity: 4
+
+#  shell: 'lsb_release -cs'
+#  register: deb_rel
+#  changed_when: false
+
 - name: Add Docker Repo
-  shell: echo "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+  template:
+    src: docker.list.j2
+    dest: /etc/apt/sources.list.d/docker.list
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+  tags: docker
+
+#  shell: echo "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
 
 - name: Reload Repos
   apt:
