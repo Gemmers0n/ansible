@@ -2,9 +2,13 @@
 - hosts: debian-docker-teamspeak
   vars:
   - ansible_become_pass: "{{ sudo_pass }}"
+  - ansible_become_pass: "{{ ts3_password }}"
   vars_prompt:
     - name: "sudo_pass"
       prompt: "Give sudo password"
+      private: yes
+    - name: "ts3_password"
+      prompt: "Give ts3 password"
       private: yes
   gather_facts: true
   become: yes
