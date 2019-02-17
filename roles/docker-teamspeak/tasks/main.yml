@@ -13,10 +13,60 @@
     mode: '0600'
     backup: yes
 
-#- name: Map container folder##TODO if not already in use
-#  shell: docker run --name some-teamspeak -v /docker/teamspeak:/var/ts3server/ -d teamspeak
-#  changed_when: false
+- name: Create pull script
+  template:
+    src: pullsnapshot.sh.j2
+    dest: /docker/teamspeak/pullsnapshot.sh
+    owner: root
+    group: root
+    mode: '0700'
+    backup: yes
+
+- name: Create pull script
+  template:
+    src: putsnapshot.sh.j2
+    dest: /docker/teamspeak/putsnapshot.sh   
+    owner: root
+    group: root
+    mode: '0700'
+    backup: yes
+
+- name: Use exported Config 
+  template:
+    src: snapshot.txt.j2
+    dest: /docker/teamspeak/snapshot.txt
+    owner: root
+    group: root
+    mode: '0600'
+    backup: yes
+
+- name: Install packages
+  apt: 
+    name: ['netcat'] 
+    state: latest
+####not yet working
+- name: Get container name
+#  command: "docker ps --format '{{.Names}}'|grep teamspeak_teamspeak"
+  command: docker ps -a|grep -v Exited|awk '{print $NF}'|grep teamspeak_teamspeak
+  register: container_name
+  changed_when: false
 
 - name: Start Docker Stack Teamspeak
   shell: docker stack deploy -c /docker/stack_teamspeak.yml teamspeak
   changed_when: false
+
+- name: Get Password
+  shell: "docker logs {{ cotainer_name }} 2>&1 | grep password|awk -F '\"' '{print $4}'"
+  changed_when: false
+
+#- name: Get Masterkey
+#  shell: "docker logs teamspeak_teamspeak.1.qh8nxl6m187vz6jxjxvcipzyv 2>&1 | grep \"|token\"|awk -F \"=\" '{print \$2}' > /docker/teamspeak/masterkey"
+#  changed_when: false
+
+- name: Put Config
+  shell: "cd /docker/teamspeak; /docker/teamspeak/putsnapshot.sh serveradmin `cat /docker/teamspeak/password` 127.0.0.1"
+  changed_when: false
+
+##change password in database
+#generate hashed pw: echo -n 'sehrGeheimes$Passwort2014' | openssl dgst -binary -sha1 | openssl base64
+#docker exec -it teamspeak_db.1.xhtk57bgcgookviiz2wjo7q6k mysql -u root -pexample -e "use teamspeak; UPDATE clients SET client_login_password='pXwPNecJXSAOPBGE12GVxKJ2wQg=' WHERE client_login_name='root';"
