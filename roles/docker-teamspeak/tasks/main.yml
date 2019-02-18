@@ -4,6 +4,16 @@
     state: directory
     mode: 0700
 
+- name: Get old container name
+  #cat if rep exit code is non-zero cats is zero
+  shell: docker ps -a|grep -v Exited|awk '{print $NF}'|grep teamspeak_teamspeak|cat
+  register: container_name_old
+  changed_when: false
+
+#- name: debug
+#  debug:
+#    msg: "Container: {{ container_name_old.stdout }}"
+
 - name: Modify Docker Stack Teamspeak
   template:
     src: stack_teamspeak.yml.j2
@@ -12,6 +22,7 @@
     group: root
     mode: '0600'
     backup: yes
+  when: (container_name_old.stdout == "")
 
 - name: Create pull script
   template:
@@ -22,7 +33,7 @@
     mode: '0700'
     backup: yes
 
-- name: Create pull script
+- name: Create put script
   template:
     src: putsnapshot.sh.j2
     dest: /docker/teamspeak/putsnapshot.sh   
@@ -44,28 +55,55 @@
   apt: 
     name: ['netcat'] 
     state: latest
-####not yet working
-- name: Get container name
-#  command: "docker ps --format '{{.Names}}'|grep teamspeak_teamspeak"
-  command: docker ps -a|grep -v Exited|awk '{print $NF}'|grep teamspeak_teamspeak
-  register: container_name
-  changed_when: false
 
 - name: Start Docker Stack Teamspeak
   shell: docker stack deploy -c /docker/stack_teamspeak.yml teamspeak
   changed_when: false
+  when: (container_name_old.stdout == "")
+
+- name: Wait for password in logfile
+  pause:
+    seconds: 15
+
+- name: Get new container name
+  shell: docker ps -a|grep -v Exited|awk '{print $NF}'|grep teamspeak_teamspeak
+  register: container_name_new
+  changed_when: false
+  when: (container_name_old.stdout == "")
+
+#- name: debug
+#  debug:
+#    msg: "Container: {{ container_name_new.stdout }}"
+#  when: (container_name_old.stdout == "")
 
 - name: Get Password
-  shell: "docker logs {{ cotainer_name }} 2>&1 | grep password|awk -F '\"' '{print $4}'"
+  shell: "docker logs {{ container_name_new.stdout }} 2>&1 | grep password|awk -F '\"' '{print $4}'"
+  register: ts3_password
   changed_when: false
+  when: (container_name_old.stdout == "")
 
-#- name: Get Masterkey
-#  shell: "docker logs teamspeak_teamspeak.1.qh8nxl6m187vz6jxjxvcipzyv 2>&1 | grep \"|token\"|awk -F \"=\" '{print \$2}' > /docker/teamspeak/masterkey"
-#  changed_when: false
+#- name: debug
+#  debug:
+#    msg: "Password: {{ ts3_password.stdout }}"
+#  when: (container_name_old.stdout == "")
 
-- name: Put Config
-  shell: "cd /docker/teamspeak; /docker/teamspeak/putsnapshot.sh serveradmin `cat /docker/teamspeak/password` 127.0.0.1"
+- name: Get Masterkey
+  shell: docker logs {{ container_name_new.stdout }} 2>&1 | grep '|token'|awk -F '=' '{print $2}'
+  register: masterkey
   changed_when: false
+  when: (container_name_old.stdout == "")
+
+#- name: debug
+#  debug:
+#    msg: "Masterkey: {{ masterkey.stdout }}"
+#  when: (container_name_old.stdout == "")
+
+- name: Put Config from preivious pull
+  shell: "cd /docker/teamspeak/; /docker/teamspeak/putsnapshot.sh serveradmin {{ ts3_password.stdout }} 127.0.0.1"
+  args:
+    chdir: /docker/teamspeak/
+  changed_when: false
+  when: (container_name_old.stdout == "")
 
 ##change password in database
 #generate hashed pw: echo -n 'sehrGeheimes$Passwort2014' | openssl dgst -binary -sha1 | openssl base64
