@@ -61,7 +61,7 @@
   changed_when: false
   when: (container_name_old.stdout == "")
 
-- name: Wait for password in logfile
+- name: Wait for Container creation
   pause:
     seconds: 15
 
