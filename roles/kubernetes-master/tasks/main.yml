@@ -1,0 +1,17 @@
+---
+- name: Create kubernetes repo
+  apt_repository:
+    repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    filename: kubernetes
+    update_cache: yes
+
+- name: Add kubernetes key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: install kubernetes
+  package:
+    name: ['kubeadm', 'kubelet', 'kubectl']
+    state: present
