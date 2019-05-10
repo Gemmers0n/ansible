@@ -1,17 +1,21 @@
+
 [debian-install]
-35.246.225.59
+35.234.123.160
 18.195.145.115
 
 [debian]
-35.246.225.59
+35.234.123.160
 18.195.145.115
 
 [debian-docker-teamspeak]
-35.246.225.59
+35.234.123.160
 18.195.145.115
 
 [debian-docker-nginx]
-35.246.225.59
+35.234.123.160 
+
+[debian-kubernetes-master]
+35.234.123.160
 
 [tor]
 #HOSTNAME.onion

@@ -1,17 +1,14 @@
 ---
-- hosts: debian-docker-teamspeak
+- hosts: debian-kubernetes-master
   vars:
   - ansible_become_pass: "{{ sudo_pass }}"
   vars_prompt:
     - name: "sudo_pass"
       prompt: "Give sudo password"
       private: yes
-    - name: "ts3_database_password"
-      prompt: "Give ts3 database password"
-      private: yes
   gather_facts: true
   become: yes
   become_user: root
   become_method: su
   roles:
-    - docker-teamspeak
+    - kubernetes-master
