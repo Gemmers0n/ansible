@@ -12,13 +12,13 @@ Ansible Runbooks for various components.
 
 Install ansible
 ```
-Give the example
-
 sudo echo 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main' > /etc/apt/sources.list.d/ansible.list
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
 sudo apt-get update
-sudo apt-get install ansible python3-apt sshpass apt-transport-https -y --allow-unauthenticated
+sudo apt-get install ansible python3-apt sshpass apt-transport-https socat -y --allow-unauthenticated
 ```
+
+Paket is the connection for tor network hosts
 
 Install git
 ```
