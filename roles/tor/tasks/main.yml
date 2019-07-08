@@ -27,3 +27,5 @@
     state: started
     enabled: yes
   tags: tor
+
+##TODO permissions on /var/lib/tor; iptables -A OUTPUT -j ACCEPT -m owner --uid-owner debian-tor

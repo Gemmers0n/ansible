@@ -20,3 +20,4 @@
 [tor]
 #HOSTNAME.onion
 
+[tor:vars] ansible_ssh_common_args: ‘-o “ProxyCommand socat STDIO SOCKS4A:127.0.0.1:%h:%p,socksport=9150”’
