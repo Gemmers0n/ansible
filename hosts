@@ -1,4 +1,3 @@
-
 [debian-install]
 35.234.123.160
 18.195.145.115
@@ -12,12 +11,11 @@
 18.195.145.115
 
 [debian-docker-nginx]
-35.234.123.160 
+35.234.123.160
 
 [debian-kubernetes-master]
 35.234.123.160
 
 [tor]
-#HOSTNAME.onion
+xemsxasyvx54ljmx.onion
 
-[tor:vars] ansible_ssh_common_args: ‘-o “ProxyCommand socat STDIO SOCKS4A:127.0.0.1:%h:%p,socksport=9150”’
