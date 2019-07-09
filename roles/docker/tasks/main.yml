@@ -1,7 +1,7 @@
 ---
 - name: Install packages
-  apt: 
-    name: ['apt-transport-https', 'ca-certificates', 'curl', 'gnupg2', 'software-properties-common'] 
+  package:
+    name: ['apt-transport-https', 'ca-certificates', 'software-properties-common']
     state: latest
 
 - name: Add docker repo key
@@ -9,21 +9,13 @@
     url: https://download.docker.com/linux/debian/gpg
     state: present
 
-- name: Register debian_ver
-  shell: lsb_release -cs
-  register: debian_ver
-  changed_when: false
-
-- name: Set debian release for docker
-  set_fact:
-    debian_release: "{{ debian_ver.stdout_lines }}"
-
 #- name: Display all variables/facts known for a host
 #  debug:
 #    var: hostvars[inventory_hostname]
 #    verbosity: 4
 
-- name: Add Docker Repo
+- name: Set repo
+  #needs gather_facts: true
   template:
     src: docker.list.j2
     dest: /etc/apt/sources.list.d/docker.list
@@ -33,13 +25,14 @@
     backup: yes
   tags: docker
 
-- name: Reload Repos
+- name: Install packages
+  #currently 2018-07-07 not working package error
   apt:
     name: ['docker-ce', 'docker-ce-cli', 'containerd.io']
     state: latest
-    update_cache: yes
+    install_recommends: no
 
-- name: Create Dir
+- name: Set directory
   file:
     path: /docker
     state: directory

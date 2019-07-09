@@ -30,7 +30,7 @@
     mode: '0644'
     backup: yes
 
-- name: Get ntp running and enabled
+- name: Set ntp running and enabled
   service:
     name: ntp
     state: started
