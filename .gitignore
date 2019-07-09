@@ -1,2 +1,2 @@
 *.retry
-*.j2
+**/templates/*.j2
