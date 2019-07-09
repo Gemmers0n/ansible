@@ -11,9 +11,9 @@
   become_user: root
   become_method: su
   roles:
-#    - user-ansible
-#    - user-default
-#    - ssh
+    - user-ansible
+    - user-default
+    - ssh
     - sysconfig
-#    - tor
+    - tor
 #    - docker

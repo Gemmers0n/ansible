@@ -31,7 +31,8 @@
     backup: yes
 
 - name: Firststart ufw
-  shell: ufw allow ssh; ufw allow ntp; ufw enable
+  #temp samba
+  shell: ufw allow ssh; ufw allow ntp; ufw allow samba; ufw enable
 
 - name: Start and enable
   service:
