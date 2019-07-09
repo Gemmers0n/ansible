@@ -1,4 +1,4 @@
-- name: Modify SSH-Config
+- name: Mod config
   template:
     src: sshd_config.j2
     dest: /etc/ssh/sshd_config
@@ -7,11 +7,11 @@
     mode: '0600'
     validate: /usr/sbin/sshd -t -f %s
     backup: yes
-  notify: 
+  notify:
     - restart ssh
   tags: ssh
 
-- name: be sure ssh is running and enabled
+- name: Get running and enabled
   service:
     name: ssh
     state: started
