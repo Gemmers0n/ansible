@@ -6,16 +6,16 @@
 
 [raspbian]
 xemsxasyvx54ljmx.onion
-honhnhjgxfz7tqvj.onion
+#honhnhjgxfz7tqvj.onion
 m24r3466b7yon7z5.onion
 2ivosifvg32tsj7m.onion
 
-[debian-docker-teamspeak]
+[debian_docker_teamspeak]
 35.234.123.160
 18.195.145.115
 
-[debian-docker-nginx]
+[debian_docker_nginx]
 35.234.123.160
 
-[debian-kubernetes-master]
+[debian_kubernetes_master]
 35.234.123.160

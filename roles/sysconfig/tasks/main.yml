@@ -8,12 +8,31 @@
     autoremove: yes
 
 - name: Install packages
-  apt: 
-    name: ['fail2ban', 'ntp'] 
+  package:
+    name: ['fail2ban', 'ntp', 'unattended-upgrades', 'apt-listchanges']
     state: latest
-    
-- name: Start ntp client
-  action: service name=ntp state=started enabled=yes
 
-#- name: Stop Bluetooth
-#  action: service name=bluetooth state=stop enabled=no
+- name: Set 20auto-upgrades
+  template:
+    src: 20auto-upgrades.j2
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+
+- name: Set 02periodic
+  template:
+    src: 02periodic.j2
+    dest: /etc/apt/apt.conf.d/02periodic
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+
+- name: Get ntp running and enabled
+  service:
+    name: ntp
+    state: started
+    enabled: yes
+  tags: ntp
