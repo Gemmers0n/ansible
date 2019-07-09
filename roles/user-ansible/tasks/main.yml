@@ -1,12 +1,13 @@
 ---
-- name: load vars
+#script for creating ansible user and changing root pass
+- name: Load variables
   include_vars:
     file: password.yml
     name: password_ansible
 
-- name: Create ansible user
+- name: Create user {{ password_ansible['username'] }}
   user:
-    name: ansible
+    name: "{{ password_ansible['username'] }}"
     password: "{{ password_ansible['ansible_pass'] }}"
     create_home: yes
     skeleton: "/etc/skel"
@@ -14,18 +15,18 @@
     groups: sudo
     append: yes
 
-- name: Modify root
+- name: Mod root
   user:
     name: root
     password: "{{ password_ansible['root_pass'] }}"
 
-- name: Set authorized key took from file
+- name: Set authorized key
   authorized_key:
-    user: ansible
+    user: "{{ password_ansible['username'] }}"
     state: present
-    key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+    key: "{{ password_ansible['publickey'] }}"
 
-- name: Enable Key Authentication
+- name: Enable key authentication
   lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: '^#?PubkeyAuthentication'
@@ -40,7 +41,7 @@
   when: sshd_config is changed
 
 - name: Delete sudo all all
-  lineinfile: 
+  lineinfile:
     dest: /etc/sudoers
     regexp: '^%sudo'
     state: absent

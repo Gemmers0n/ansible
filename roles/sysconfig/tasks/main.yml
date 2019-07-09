@@ -9,7 +9,7 @@
 
 - name: Install packages
   package:
-    name: ['fail2ban', 'ntp', 'unattended-upgrades', 'apt-listchanges']
+    name: ['fail2ban', 'ntp', 'unattended-upgrades', 'apt-listchanges', 'iptables']
     state: latest
 
 - name: Set 20auto-upgrades
@@ -30,9 +30,42 @@
     mode: '0644'
     backup: yes
 
-- name: Set ntp running and enabled
+- name: Start and enable
   service:
     name: ntp
     state: started
     enabled: yes
   tags: ntp
+
+- name: Put directory
+  file:
+    path: /etc/iptables
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Set iptables sysconfig
+  template:
+    src: iptables-sysconfig.j2
+    dest: /etc/iptables-sysconfig.conf
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+
+- name: Set iptables reject
+  template:
+    src: iptables-reject.j2
+    dest: /etc/iptables-reject.conf
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+
+- name: Start and enable
+  service:
+    name: fail2ban
+    state: started
+    enabled: yes
+  tags: fail2ban
