@@ -13,7 +13,6 @@
   roles:
 #    - user-default
 #    - ssh
-    - unattended-upgrades
-    - sysconfig
-    - docker
+#    - sysconfig
+#    - docker
     - tor
