@@ -9,6 +9,24 @@
     create_home: no
     shell: "/bin/false"
 
+- name: Get id of {{ samba_user }}
+  shell: 'id -u {{ samba_user }}'
+  register: samba_userid
+  changed_when: false
+
+- name: Create userdump of {{ samba_user }}
+  copy:
+    content: "{{ samba_user }}:{{ samba_userid.stdout }}:{{ samba_hash }}"
+    dest: /etc/samba/smbpasswd
+    force: yes
+    owner: root
+    group: root
+    mode: '0600'
+    backup: yes
+
+- name: Import userdump of {{ samba_user }}
+  shell: 'pdbedit -i smbpasswd -e tdbsam'
+
 - name: Mod config
   template:
     src: smb.conf.j2
@@ -28,7 +46,3 @@
     state: started
     enabled: yes
   tags: smb
-
-##TODO smbuseradd
-# get smb userdatabase pdbedit -L -w
-# import smb userdatabase pdbedit --import={FILE}
