@@ -1,0 +1,3 @@
+#generated with: openssl passwd -1 --salt mchasfce
+userpassword: $1$mchasfce$HV9s3UFcA0fmESerxFZBe1
+username: nasreader

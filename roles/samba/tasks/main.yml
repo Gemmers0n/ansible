@@ -1,0 +1,38 @@
+- name: Install packages
+  package:
+    name: samba
+    state: present
+
+- name: Create user {{ password_ansible['username'] }}
+  user:
+    name: "{{ user['username'] }}"
+    password: "{{ user['userpassword'] }}"
+    create_home: no
+    skeleton: "/etc/skel"
+    shell: "/bin/bash"
+    groups: sudo
+    append: yes
+
+- name: Mod config
+  template:
+    src: smb.conf.j2
+    dest: /etc/samba/smb.conf
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+    validate: 'testparm -s %s'
+  notify:
+    - restart smbd
+  tags: smb
+
+- name: Get running and enabled
+  service:
+    name: smbd
+    state: started
+    enabled: yes
+  tags: smb
+
+##TODO useradd + smbuseradd
+# get smb userdatabase pdbedit -L -w
+# import smb userdatabase pdbedit --import={FILE}
