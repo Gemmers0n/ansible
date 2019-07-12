@@ -23,3 +23,11 @@
    #server min protocol = SMB3_00
    #Windows 8.1 Protocol Version
    #server min protocol = SMB3_02
+{% if inventory_hostname in groups['gemmern'] %}
+[Main]
+  path = /mnt
+  writeable = yes
+  write list = {{ samba_user }}
+  valid users = {{ samba_user }}
+  guest ok  = no
+{% endif %}
