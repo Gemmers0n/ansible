@@ -3,15 +3,11 @@
     name: samba
     state: present
 
-- name: Create user {{ password_ansible['username'] }}
+- name: Create user {{ samba_user }}
   user:
-    name: "{{ user['username'] }}"
-    password: "{{ user['userpassword'] }}"
+    name: "{{ samba_user }}"
     create_home: no
-    skeleton: "/etc/skel"
-    shell: "/bin/bash"
-    groups: sudo
-    append: yes
+    shell: "/bin/false"
 
 - name: Mod config
   template:
@@ -33,6 +29,6 @@
     enabled: yes
   tags: smb
 
-##TODO useradd + smbuseradd
+##TODO smbuseradd
 # get smb userdatabase pdbedit -L -w
 # import smb userdatabase pdbedit --import={FILE}
