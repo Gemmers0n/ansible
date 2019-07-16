@@ -4,6 +4,7 @@ all:
   children:
     firstinstall:
       hosts:
+        m24r3466b7yon7z5.onion
     debian:
       hosts:
         35.234.123.160
