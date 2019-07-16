@@ -1,27 +1,27 @@
-[firstinstall]
-
-[debian]
-35.234.123.160
-18.195.145.115
-
-[raspbian]
-xemsxasyvx54ljmx.onion
-#honhnhjgxfz7tqvj.onion
-#m24r3466b7yon7z5.onion
-2ivosifvg32tsj7m.onion
-
-[gemmern]
-xemsxasyvx54ljmx.onion
-
-[knaben]
-2ivosifvg32tsj7m.onion
-
-[debian_docker_teamspeak]
-35.234.123.160
-18.195.145.115
-
-[debian_docker_nginx]
-35.234.123.160
-
-[debian_kubernetes_master]
-35.234.123.160
+---
+all:
+  hosts:
+  children:
+    firstinstall:
+      hosts:
+    debian:
+      hosts:
+        35.234.123.160
+        18.195.145.115
+    tor:
+      hosts:
+      children:
+        raspbian:
+          hosts:
+          children:
+            gemmern:
+              hosts:
+                xemsxasyvx54ljmx.onion
+                #honhnhjgxfz7tqvj.onion
+            knaben:
+              hosts:
+                m24r3466b7yon7z5.onion
+                #2ivosifvg32tsj7m.onion
+    test:
+      hosts:
+        127.0.0.1 ansible_ssh_user:'ansible' ansible_ssh_private_key_file:'~/.ssh/id_rsa'

@@ -2,3 +2,6 @@
 samba_user: 'rslsync'
 #samba_hash output from previous samba server with "pdbedit -L -w"
 samba_hash: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX:400849FE332EDB779757D843CF6F919F:[U          ]:LCT-59441736:'
+
+resilio_port: '2779'
+resilio_storage_path: '/var/lib/resilio-sync/'

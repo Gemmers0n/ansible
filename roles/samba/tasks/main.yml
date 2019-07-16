@@ -46,3 +46,6 @@
     state: started
     enabled: yes
   tags: smb
+
+- name: Allow in firewall ufw
+  shell: ufw allow samba
