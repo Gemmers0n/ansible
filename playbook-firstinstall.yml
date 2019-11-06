@@ -3,6 +3,7 @@
   vars:
   - ansible_ssh_user: "{{ ssh_user }}"
   - ansible_ssh_pass: "{{ ssh_pass }}"
+  - ssh_host_key_checking: false
   vars_prompt:
     - name: "ssh_user"
       prompt: "Connect user"

@@ -16,5 +16,5 @@
     - ssh
     - sysconfig
     - tor
-    - resilio-sync
-    - samba
+#    - resilio-sync
+#    - samba

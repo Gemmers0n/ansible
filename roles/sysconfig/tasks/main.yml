@@ -2,10 +2,15 @@
 - name: Upgrade distribution
   apt:
     update_cache: yes
-    cache_valid_time: 3600
-    upgrade: dist
-    autoclean: yes
-    autoremove: yes
+#    cache_valid_time: 3600
+#    upgrade: dist
+#    autoclean: yes
+#    autoremove: yes
+
+- name: workaround for dist-upgrade prompt
+  shell: export DEBIAN_FRONTEND=noninteractive; apt-get -o Dpkg::Options::=\"--force-confnew\" --assume-yes dist-upgrade
+#  shell: export DEBIAN_FRONTEND=noninteractive
+
 
 - name: Install packages
   package:
