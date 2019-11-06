@@ -4,7 +4,8 @@ all:
   children:
     firstinstall:
       hosts:
-        m24r3466b7yon7z5.onion
+        #m24r3466b7yon7z5.onion
+        192.168.1.204
     debian:
       hosts:
         35.234.123.160
@@ -17,11 +18,12 @@ all:
           children:
             gemmern:
               hosts:
-                xemsxasyvx54ljmx.onion
+                192.168.1.204
+                #xemsxasyvx54ljmx.onion
                 #honhnhjgxfz7tqvj.onion
             knaben:
               hosts:
-                m24r3466b7yon7z5.onion
+                #m24r3466b7yon7z5.onion
                 #2ivosifvg32tsj7m.onion
     test:
       hosts:

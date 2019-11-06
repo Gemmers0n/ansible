@@ -45,11 +45,11 @@
   when: (user_old.stdout != user['username'])
 
 - name: Mod user name for {{ user['username'] }}
-  shell: usermod --login {{ user['username'] }} {{ user_old.stdout }}
+  shell: /usr/sbin/usermod --login {{ user['username'] }} {{ user_old.stdout }}
   when: (user_old.stdout != user['username'])
 
 - name: Mod user group for {{ user['username'] }}
-  shell: groupmod --new-name {{ user['username'] }} {{ user_old.stdout }}
+  shell: /usr/sbin/groupmod --new-name {{ user['username'] }} {{ user_old.stdout }}
   when: (user_old.stdout != user['username'])
 
 - name: Set authorized key
