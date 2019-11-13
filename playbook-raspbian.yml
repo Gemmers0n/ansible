@@ -17,4 +17,5 @@
     - sysconfig
     - tor
     - resilio-sync
+    - mounts
     - samba
