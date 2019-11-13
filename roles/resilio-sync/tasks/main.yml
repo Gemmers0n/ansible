@@ -4,17 +4,17 @@
   register: architecture
   changed_when: architecture.rc == 1
 
+- name: Set repo key
+  apt_key:
+    url: https://linux-packages.resilio.com/resilio-sync/key.asc
+    state: present
+
 - name: Create repo for {{ architecture.stdout }}
   apt_repository:
     repo: deb [arch={{ architecture.stdout }}] http://linux-packages.resilio.com/resilio-sync/deb resilio-sync non-free
     state: present
     filename: resilio-sync
     update_cache: yes
-
-- name: Set repo key
-  apt_key:
-    url: https://linux-packages.resilio.com/resilio-sync/key.asc
-    state: present
 
 - name: Install packages
   package:
@@ -30,7 +30,7 @@
     mode: '0644'
     backup: yes
   notify:
-    - restart resilio-sync
+    - restart rslsync
   tags: resilio-sync
 
 - name: Make sure a service is running
