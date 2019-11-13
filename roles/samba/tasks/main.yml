@@ -47,5 +47,25 @@
     enabled: yes
   tags: smb
 
-- name: Allow in firewall ufw
-  shell: ufw allow samba
+#Firewall rules
+
+#For Debian-based systems python-apt package must be installed on targeted hosts.
+- name: Install packages
+  package:
+    name: python-apt
+    state: present
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+
+#Print installed packages for debug
+#- name: Print the rpm package facts
+#  debug:
+#    var: ansible_facts.packages
+
+- name: Check whether a package called is installed
+  command: /usr/sbin/ufw allow samba
+#  debug:
+#    msg: "{{ ansible_facts.packages['ufw'] | length }} versions of ufw are installed!"
+  when: "'ufw' in ansible_facts.packages"
