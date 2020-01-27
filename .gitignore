@@ -1,3 +1,4 @@
+hosts
 *.retry
 *.j2
 privatekey/id_rsa
