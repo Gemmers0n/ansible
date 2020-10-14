@@ -21,6 +21,8 @@
     name: resilio-sync
     state: present
 
+##TODO change log dir to /var/log/resilio-sync
+##TODO set dir permission that gets synced
 - name: Mod config
   template:
     src: config.json.j2

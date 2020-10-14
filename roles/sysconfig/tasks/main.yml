@@ -70,3 +70,6 @@
     state: started
     enabled: yes
   tags: ufw
+
+##TODO set ntp servers + timezone
+##TODO check rpi throttling /opt/vc/bin/vcgencmd get_throttled (0x50000 voltage 0x80000 heat)
