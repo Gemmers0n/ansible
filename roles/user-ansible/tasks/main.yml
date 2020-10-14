@@ -5,9 +5,9 @@
     file: password.yml
     name: password_ansible
 
-- name: Create user {{ password_ansible['username'] }}
+- name: Create user {{ password_ansible['username_ansible'] }}
   user:
-    name: "{{ password_ansible['username'] }}"
+    name: "{{ password_ansible['username_ansible'] }}"
     password: "{{ password_ansible['ansible_pass'] }}"
     create_home: yes
     skeleton: "/etc/skel"
@@ -22,10 +22,10 @@
 
 - name: Set authorized key
   authorized_key:
-    user: "{{ password_ansible['username'] }}"
+    user: "{{ password_ansible['username_ansible'] }}"
     state: present
 ##TODO use key from /etc/ansibble/privatekey/id_rsa.pub
-    key: "{{ password_ansible['publickey'] }}"
+    key: "{{ password_ansible['publickey_ansible'] }}"
 
 - name: Enable key authentication
   lineinfile:
@@ -34,6 +34,72 @@
     line: "PubkeyAuthentication yes"
     state: present
   register: sshd_config
+
+#was user defualt
+
+#checks
+
+- name: Get old user
+  shell: 'id -nu 1000'
+  register: user_old
+  changed_when: false
+
+#- name: debug
+#  debug:
+#    msg: "User: {{ user_old.stdout }}"
+
+- name: Get home
+  command: ls /home/"{{ user_old.stdout }}"
+  register: home_available
+  ignore_errors: true
+  changed_when: false
+
+- name: Get user
+  command: grep "{{ user_old.stdout }}" /etc/passwd
+  register: user_available
+  ignore_errors: true
+  changed_when: false
+
+- name: Get group
+  command: grep "{{ user_old.stdout }}" /etc/group
+  register: group_available
+  ignore_errors: true
+  changed_when: false
+
+#actions
+
+##TODO add new user and then deactivate old user after he is logged off with shell script
+#- name: Mod user home for {{ user['username'] }}
+#  user:
+#    name: "{{ user_old.stdout }}"
+#    group: "{{ user_old.stdout }}"
+#    home: "/home/{{ user['username'] }}"
+#    move_home: yes
+#  when: (user_old.stdout != user['username'])
+
+#- name: Mod user name for {{ user['username'] }}
+#  shell: /usr/sbin/usermod --login {{ user['username'] }} {{ user_old.stdout }}
+#  when: (user_old.stdout != user['username'])
+
+#- name: Mod user group for {{ user['username'] }}
+#  shell: /usr/sbin/groupmod --new-name {{ user['username'] }} {{ user_old.stdout }}
+#  when: (user_old.stdout != user['username'])
+
+- name: Create user {{ password_ansible['username_default'] }}
+  user:
+    name: "{{ password_ansible['username_default'] }}"
+    create_home: yes
+    skeleton: "/etc/skel"
+    shell: "/bin/bash"
+    groups: sudo
+    append: yes
+
+- name: Set authorized key
+  authorized_key:
+    user: "{{ password_ansible['username_default'] }}"
+    state: present
+    key: "{{ password_ansible['publickey_default'] }}"
+#till here
 
 - name: Restart ssh
   shell: sleep 3; systemctl restart sshd
