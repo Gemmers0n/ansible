@@ -1,5 +1,5 @@
 ---
-- hosts: debian_docker_nginx
+- hosts: gemmern
   vars:
   - ansible_become_pass: "{{ sudo_pass }}"
   vars_prompt:
@@ -11,4 +11,5 @@
   become_user: root
   become_method: su
   roles:
-    - docker-nginx
+    - docker
+#    - docker-nginx
