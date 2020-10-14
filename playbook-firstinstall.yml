@@ -9,7 +9,7 @@
       prompt: "Connect user"
       private: no
     - name: "ssh_pass"
-      prompt: "Connect password"
+      prompt: "Connect password (leave empty if key placed)"
       private: yes
 
   tasks:

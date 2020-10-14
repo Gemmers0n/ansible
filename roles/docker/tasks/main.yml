@@ -4,21 +4,31 @@
     name: ['apt-transport-https', 'ca-certificates', 'software-properties-common', 'curl', 'gnupg2']
     state: latest
 
-- name: Add docker repo key
-  apt_key:
-    url: https://download.docker.com/linux/debian/gpg
-#curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
-    state: present
+- name: Set ansible_architecture as amd64 if it's x86_64
+  set_fact:
+    ansible_architecture_altname: "amd64"
+  when: ansible_architecture == "x86_64"
 
 - name: Create repo
   apt_repository:
-#    repo: "deb [arch={{ ansible_architecture }}] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"''giving arm71 instead of armnhf
-    repo: "deb [arch=armhf] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+    repo: "deb [arch={{ ansible_architecture_altname }}] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
     state: present
     filename: docker
     update_cache: yes
 
-#needs docker update
+
+#- name: Create repo
+#  apt_repository:
+#    repo: "deb [arch=amd64] https://download.docker.com/linux/debian/ {{ ansible_distribution_release }} stable"
+#    state: present
+#    filename: docker
+#    update_cache: yes
+
+- name: Add docker repo key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
 - name: Install packages
   #currently 2018-07-07 not working package error
   apt:
@@ -29,7 +39,7 @@
 
 - name: Set directory
   file:
-    path: /gmrsn3/docker
+    path: /docker
     state: directory
     mode: 0700
 
@@ -45,7 +55,6 @@
 #sed -i -e 's/DEFAULT_FORWARD_POLICY="DROP"/DEFAULT_FORWARD_POLICY="ACCEPT"/g' /etc/default/ufw
 #ufw reload
 #iptables -t nat -A POSTROUTING ! -o docker0 -s 172.17.0.0/16 -j MASQUERADE
-
 
 #docker node ls|echo $?##if 1 still no swarm node if 0 swarm node
 #- name: Create Docker Swarm##TODO run oly once
