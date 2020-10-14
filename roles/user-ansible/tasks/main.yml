@@ -5,6 +5,14 @@
     file: password.yml
     name: password_ansible
 
+- name: Load variables from inverntory
+  include_vars: 
+    file: "group_vars/all.yml"
+    name: groupvars
+#  debug:
+#    var: pubkey_ansible
+
+
 - name: Create user {{ password_ansible['username_ansible'] }}
   user:
     name: "{{ password_ansible['username_ansible'] }}"
@@ -25,7 +33,8 @@
     user: "{{ password_ansible['username_ansible'] }}"
     state: present
 ##TODO use key from /etc/ansibble/privatekey/id_rsa.pub
-    key: "{{ password_ansible['publickey_ansible'] }}"
+#    key: "{{ password_ansible['publickey_ansible'] }}"
+    key: "{{ groupvars['pubkey_ansible'] }}"
 
 - name: Enable key authentication
   lineinfile:
