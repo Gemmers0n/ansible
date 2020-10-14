@@ -36,6 +36,7 @@
     file: user.yml
     name: user
 
+##TODO add new user and then deactivate old user after he is logged off with shell script
 - name: Mod user home for {{ user['username'] }}
   user:
     name: "{{ user_old.stdout }}"

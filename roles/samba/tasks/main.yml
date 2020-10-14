@@ -39,6 +39,8 @@
   notify:
     - restart smbd
   tags: smb
+##TODO set permissions on dir with acls
+
 
 - name: Get running and enabled
   service:

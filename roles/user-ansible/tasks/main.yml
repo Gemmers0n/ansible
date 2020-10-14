@@ -24,6 +24,7 @@
   authorized_key:
     user: "{{ password_ansible['username'] }}"
     state: present
+##TODO use key from /etc/ansibble/privatekey/id_rsa.pub
     key: "{{ password_ansible['publickey'] }}"
 
 - name: Enable key authentication

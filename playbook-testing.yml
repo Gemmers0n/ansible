@@ -1,5 +1,5 @@
 ---
-- hosts: raspbian
+- hosts: testhosts
   vars:
   - ansible_become_pass: "{{ sudo_pass }}"
   vars_prompt:
@@ -11,12 +11,4 @@
   become_user: root
   become_method: su
   roles:
-    - user-ansible
-    - user-default
-    - ssh
-    - sysconfig
-    - tor
-#    - mounts##needs rework
-#    - resilio-sync##needs rework
-    - samba
-#    - docker##needs rework
+    - docker

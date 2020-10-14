@@ -14,6 +14,7 @@
     mode: '0644'
     state: directory
 
+##TODO use uuid from hostvarz OR add both mounts
 - name: Mount up device by UUID
   mount:
     path: "{{ mounts['path'] }}"
@@ -21,3 +22,12 @@
     fstype: ext4
     opts: defaults,nofail
     state: mounted
+
+- name: Mount up device by UUID
+  mount:
+    path: "{{ mounts['path'] }}"
+    src: UUID="{{ mounts['uuid2'] }}"
+    fstype: ext4
+    opts: defaults,nofail
+    state: mounted
+
