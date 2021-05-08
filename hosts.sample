@@ -2,29 +2,33 @@
 all:
   hosts:
   children:
-    firstinstall:
+    debian_based:
       hosts:
-        #m24r3466b7yon7z5.onion
-        192.168.1.204
-    debian:
-      hosts:
-        35.234.123.160
-        18.195.145.115
+        8.8.8.8: #home
     tor:
       hosts:
       children:
+        windows:
+          hosts:
+            7lfdpbs54n4t4ecpn5gagqocw6veng2dm7bjh6krsfabvrawsbteseta.onion #Windowshost1
+            fazszn6q6mg5etfi2ch7x5nx6hphthstedghstedhegdneasbebsdfbd.onion #Windowshost2
         raspbian:
           hosts:
           children:
-            gemmern:
+            hostgrouptesting:
               hosts:
-                192.168.1.204
-                #xemsxasyvx54ljmx.onion
-                #honhnhjgxfz7tqvj.onion
-            knaben:
+                raspi_testing:
+                  ansible_host: tv5sgsy7f3hhohz4mmc72ixorgfvhzirndgndgfhjnsedhesthesthes.onion  
+                  mounts_enabled: true
+                  mounts_path: '/mount'
+                  mounts_uuid: 'c4cec055-1638-4ec9-9860-e98dec1edd69'
+                gcp:
+                  ansible_host: g4lhhkd2kmmo7a667kgshjdhgfdsgfasgsfdgafswgwrtwrtwargsfdf.onion
+                  samba_enabled: false
+            hostgroupstable:
               hosts:
-                #m24r3466b7yon7z5.onion
-                #2ivosifvg32tsj7m.onion
-    test:
-      hosts:
-        127.0.0.1 ansible_ssh_user:'ansible' ansible_ssh_private_key_file:'~/.ssh/id_rsa'
+                raspi_stable:
+                  ansible_host: mmnsaylvetzhrhzehg3ts4cpncgwh2sd6riesxgc3hleaobfa7kstlid.onion
+                  mounts_enabled: true
+                  mounts_path: '/mnt'
+                  mounts_uuid: '09b4c4a2-7c8b-47dd-cc7b-e12d113a18e5'

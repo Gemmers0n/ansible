@@ -3,3 +3,5 @@ hosts
 *.j2
 privatekey/id_rsa
 privatekey/.vault_pass
+privatekey/hosts/*
+group_vars/*.yml
