@@ -1,8 +1,0 @@
----
-samba_enabled: true
-samba_user: 'nasreader'
-#samba_hash output from previous samba server with "pdbedit -L -w"
-samba_hash: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX:8836C95290EBC55C241FAD4348C1DD03:[U          ]:LCT-606722FF:'
-
-resilio_port: '2779'
-resilio_storage_path: '/mnt/resilio-sync/'
