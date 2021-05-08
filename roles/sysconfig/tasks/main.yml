@@ -7,8 +7,8 @@
 #    autoclean: yes
 #    autoremove: yes
 
-- name: workaround for dist-upgrade prompt
-  shell: export DEBIAN_FRONTEND=noninteractive; apt-get -o Dpkg::Options::="--force-confnew" --assume-yes dist-upgrade
+#- name: workaround for dist-upgrade prompt
+#  shell: export DEBIAN_FRONTEND=noninteractive; apt-get -o Dpkg::Options::="--force-confnew" --assume-yes dist-upgrade
 ##  shell: export DEBIAN_FRONTEND=noninteractive
 
 
@@ -40,20 +40,20 @@
 #                     /^:[A-Z]+ [^-]/ { print $1 " ACCEPT" ; }
 #                     /COMMIT/ { print $0; }' | iptables-restore; iptables-save;
 
-- name: Allow base services on ufw
+- name: Allow ssh on ufw
   command: /usr/sbin/ufw allow ssh
 
-- name: Start and enable
+- name: Start and enable ntp
   service:
     name: ntp
     state: started
     enabled: yes
   tags: ntp
 
-- name: Allow base services on ufw
+- name: Allow ntp on ufw
   command: /usr/sbin/ufw allow ntp
 
-- name: Start and enable
+- name: Start and enable fail2ban
   service:
     name: fail2ban
     state: started
@@ -64,7 +64,7 @@
 #- name: start ufw first time
 #  command: /usr/sbin/ufw enable
 
-- name: Start and enable
+- name: Start and enable ufw
   service:
     name: ufw
     state: started

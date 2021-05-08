@@ -1,31 +1,19 @@
 ---
-
-- name: Get variables
-  include_vars:
-    file: mounts.yml
-    name: mounts
-
 ##TODO make unwritable if not mounted
 - name: Create dir
   file:
-    path: "{{ mounts['path'] }}"
+    path: "{{ mounts_path }}"
     owner: root
     group: root
-    mode: '0644'
+    mode: '0755'
     state: directory
+  when: mounts_enabled | bool
 
 - name: Mount up device by UUID
   mount:
-    path: "{{ mounts['path'] }}"
-    src: UUID="{{ mounts['uuid'] }}"
+    path: "{{ mounts_path }}"
+    src: UUID="{{ mounts_uuid }}"
     fstype: ext4
     opts: defaults,nofail
     state: mounted
-
-- name: Mount up device by UUID
-  mount:
-    path: "{{ mounts['path'] }}"
-    src: UUID="{{ mounts['uuid2'] }}"
-    fstype: ext4
-    opts: defaults,nofail
-    state: mounted
+  when: mounts_enabled | bool
