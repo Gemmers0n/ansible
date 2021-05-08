@@ -10,8 +10,10 @@ all:
       children:
         windows:
           hosts:
-            7lfdpbs54n4t4ecpn5gagqocw6veng2dm7bjh6krsfabvrawsbteseta.onion #Windowshost1
-            fazszn6q6mg5etfi2ch7x5nx6hphthstedghstedhegdneasbebsdfbd.onion #Windowshost2
+            winhost1:
+              ansible_host: 7lfdpbs54n4t4ecpn5gagqocw6veng2h7adrudetghewhsswhetq3tqd.onion
+            winhost2:
+              ansible_host: fazszn6q6mg5etfi2ch7x5nx6hphagwhwrwg5dwsvaws2v5b7wccueid.onion
         raspbian:
           hosts:
           children:
