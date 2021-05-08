@@ -1,18 +1,21 @@
 - name: Install packages
   package:
-    name: samba
-    state: present
+    name: ['python-apt', 'samba']
+    state: latest
+  when: samba_enabled | bool
 
 - name: Create user {{ samba_user }}
   user:
     name: "{{ samba_user }}"
     create_home: no
     shell: "/bin/false"
+  when: samba_enabled | bool
 
 - name: Get id of {{ samba_user }}
   shell: 'id -u {{ samba_user }}'
   register: samba_userid
   changed_when: false
+  when: samba_enabled | bool
 
 - name: Create userdump of {{ samba_user }}
   copy:
@@ -23,9 +26,11 @@
     group: root
     mode: '0600'
     backup: yes
+  when: samba_enabled | bool
 
 - name: Import userdump of {{ samba_user }}
   shell: 'pdbedit -i smbpasswd -e tdbsam'
+  when: samba_enabled | bool
 
 - name: Mod config
   template:
@@ -39,6 +44,8 @@
   notify:
     - restart smbd
   tags: smb
+  when: samba_enabled | bool
+  register: samba_config
 ##TODO set permissions on dir with acls
 
 - name: Get running and enabled
@@ -47,26 +54,24 @@
     state: started
     enabled: yes
   tags: smb
+  when: samba_enabled | bool and  samba_config is changed
 
 #Firewall rules
 
 #For Debian-based systems python-apt package must be installed on targeted hosts.
-- name: Install packages
-  package:
-    name: python-apt
-    state: present
-
 - name: Gather the package facts
   package_facts:
     manager: auto
+  when: samba_enabled | bool
 
 #Print installed packages for debug
 #- name: Print the rpm package facts
 #  debug:
 #    var: ansible_facts.packages
 
-- name: Check whether a package called is installed
-  command: /usr/sbin/ufw allow samba
+##TODO rewok for if not installed
+#- name: Check whether a package called is installed
+#  command: /usr/sbin/ufw allow samba
 #  debug:
 #    msg: "{{ ansible_facts.packages['ufw'] | length }} versions of ufw are installed!"
-  when: "'ufw' in ansible_facts.packages"
+#  when: "'ufw' in ansible_facts.packages"

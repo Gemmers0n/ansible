@@ -1,22 +1,25 @@
 ---
-- hosts: debian_based
+- hosts: raspbian
+#  strategy: free #allows paralel run of hosts and/or roles
+  vars_files:
+    - secret
   vars:
-  - ansible_become_pass: "{{ sudo_pass }}"
-  vars_prompt:
-    - name: "sudo_pass"
-      prompt: "Give sudo password"
-      private: yes
+  - ansible_become_pass: "{{ ansible_sudo_pass }}"
+#  - ansible_become_pass: "{{ sudo_pass }}"
+#  vars_prompt:
+#    - name: "sudo_pass"
+#      prompt: "Give sudo password"
+#      private: yes
   gather_facts: true
   become: yes
   become_user: root
   become_method: su
   roles:
+    - samba
     - user-ansible
-#    - user-default#deprecated
-#    - ssh
-#    - sysconfig
-#    - tor
-#    - mounts##needs rework
+    - ssh
+    - sysconfig
+    - tor
+    - mounts
 #    - resilio-sync##needs rework
-#    - samba
 #    - docker##needs rework

@@ -1,22 +1,15 @@
 ---
 #script for creating ansible user and changing root pass
-- name: Load variables
-  include_vars:
-    file: password.yml
-    name: password_ansible
-
-- name: Load variables from inverntory
-  include_vars: 
-    file: "group_vars/all.yml"
-    name: groupvars
-#  debug:
-#    var: pubkey_ansible
+#- name: Load variables
+#  include_vars:
+#    file: password.yml
+#    name: password_ansible
 
 
-- name: Create user {{ password_ansible['username_ansible'] }}
+- name: Create user {{ ansible_inventory_username | default('ansible') }}
   user:
-    name: "{{ password_ansible['username_ansible'] }}"
-    password: "{{ password_ansible['ansible_pass'] }}"
+    name: "{{ ansible_inventory_username | default('ansible') }}"
+    password: "{{ ansible_pass }}"
     create_home: yes
     skeleton: "/etc/skel"
     shell: "/bin/bash"
@@ -26,15 +19,14 @@
 - name: Mod root
   user:
     name: root
-    password: "{{ password_ansible['root_pass'] }}"
+    password: "{{ root_pass }}"
+  when: root_pass is defined
 
 - name: Set authorized key
   authorized_key:
-    user: "{{ password_ansible['username_ansible'] }}"
+    user: "{{ ansible_inventory_username | default('ansible') }}"
     state: present
-##TODO use key from /etc/ansibble/privatekey/id_rsa.pub
-#    key: "{{ password_ansible['publickey_ansible'] }}"
-    key: "{{ groupvars['pubkey_ansible'] }}"
+    key: "{{ pubkey_ansible | default('ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDgiqLqpbtnajveGut0MVeqtG9v/GDTwUbY98Btdb9G9EUWiXJOXcXccukKoZ5I4iFajENIzxNEIEfqA7dcgwkwBwDS8I5o+oGvCGue3k8ihq9K1EKw3f404CgUCYG5dhQBqLJm5zjuuKMdnsREGe8PCmJtx0pZrLKphds58YGdYt651PCEq+/DCnvoKJVSSnEwCPKqFB6f2PFKlsjnI40CLQP2qe+ugmHre/ndFMo5hxk/s5WXnIKL5JMMfdrfC4xM8mUYuyMaWmGquh2s+bZWRnjfjrlGUsOl4KgE7nZtWDaWTalvTAEjuM3l2JXLOy3KikzspVQQIBTO4bht8UVt default@default')}}"
 
 - name: Enable key authentication
   lineinfile:
@@ -43,8 +35,6 @@
     line: "PubkeyAuthentication yes"
     state: present
   register: sshd_config
-
-#was user defualt
 
 #checks
 
@@ -94,9 +84,9 @@
 #  shell: /usr/sbin/groupmod --new-name {{ user['username'] }} {{ user_old.stdout }}
 #  when: (user_old.stdout != user['username'])
 
-- name: Create user {{ password_ansible['username_default'] }}
+- name: Create user {{ username_default | default('default-user') }}
   user:
-    name: "{{ password_ansible['username_default'] }}"
+    name: "{{ username_default | default('default-user') }}"
     create_home: yes
     skeleton: "/etc/skel"
     shell: "/bin/bash"
@@ -105,9 +95,9 @@
 
 - name: Set authorized key
   authorized_key:
-    user: "{{ password_ansible['username_default'] }}"
+    user: "{{ username_default | default('default-user') }}"
     state: present
-    key: "{{ password_ansible['publickey_default'] }}"
+    key: "{{ publickey_default | default('ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDgiqLqpbtnajveGut0MVeqtG9v/GDTwUbY98Btdb9G9EUWiXJOXcXccukKoZ5I4iFajENIzxNEIEfqA7dcgwkwBwDS8I5o+oGvCGue3k8ihq9K1EKw3f404CgUCYG5dhQBqLJm5zjuuKMdnsREGe8PCmJtx0pZrLKphds58YGdYt651PCEq+/DCnvoKJVSSnEwCPKqFB6f2PFKlsjnI40CLQP2qe+ugmHre/ndFMo5hxk/s5WXnIKL5JMMfdrfC4xM8mUYuyMaWmGquh2s+bZWRnjfjrlGUsOl4KgE7nZtWDaWTalvTAEjuM3l2JXLOy3KikzspVQQIBTO4bht8UVt default@default') }}"
 #till here
 
 - name: Restart ssh
