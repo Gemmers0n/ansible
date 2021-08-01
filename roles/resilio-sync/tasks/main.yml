@@ -3,11 +3,13 @@
   shell: dpkg --print-architecture
   register: architecture
   changed_when: architecture.rc == 1
+  when: rslsync_enabled | bool
 
 - name: Set repo key
   apt_key:
     url: https://linux-packages.resilio.com/resilio-sync/key.asc
     state: present
+  when: rslsync_enabled | bool
 
 - name: Create repo for {{ architecture.stdout }}
   apt_repository:
@@ -15,14 +17,76 @@
     state: present
     filename: resilio-sync
     update_cache: yes
+  when: rslsync_enabled | bool
 
 - name: Install packages
   package:
-    name: resilio-sync
+    name: "{{ item }}"
     state: present
+  with_items:
+    - "resilio-sync"
+    - "acl"
+  when: rslsync_enabled | bool
 
-##TODO change log dir to /var/log/resilio-sync
-##TODO set dir permission that gets synced
+- name: create dirs
+  file: 
+    path: "{{ item.value.folder }}"
+    state: directory
+    mode: 755
+  with_dict: "{{ resilio_folders }}"
+  when: rslsync_enabled | bool
+
+- name: create default dir
+  file:
+    path: "{{ resilio_storage_path }}"
+    state: directory
+    mode: 755
+  when: rslsync_enabled | bool
+
+- name: set default ACL
+  acl:
+    path: "{{ resilio_storage_path }}"
+    recursive: yes
+    entity: rslsync
+    etype: user
+    permissions: rwX
+    default: yes
+    state: present
+  when: rslsync_enabled | bool
+
+- name: set ACL
+  acl:
+    path: "{{ resilio_storage_path }}"
+    recursive: yes
+    entity: rslsync
+    etype: user
+    permissions: rwX
+    state: present
+  when: rslsync_enabled | bool
+
+- name: set default ACL
+  acl:
+    path: "{{ item.value.folder }}"
+    recursive: yes
+    entity: rslsync
+    etype: user
+    permissions: rwX
+    default: yes
+    state: present
+  with_dict: "{{ resilio_folders }}"
+  when: rslsync_enabled | bool
+
+- name: set ACL
+  acl:
+    path: "{{ item.value.folder }}"
+    recursive: yes
+    entity: rslsync
+    etype: user
+    permissions: rwX
+    state: present
+  with_dict: "{{ resilio_folders }}"
+  when: rslsync_enabled | bool
+
 - name: Mod config
   template:
     src: config.json.j2
@@ -34,9 +98,11 @@
   notify:
     - restart rslsync
   tags: resilio-sync
+  when: rslsync_enabled | bool
 
 - name: Make sure a service is running
   systemd:
     state: started
     name: resilio-sync
     enabled: yes
+  when: rslsync_enabled | bool
