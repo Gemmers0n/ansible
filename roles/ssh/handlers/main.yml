@@ -1,5 +1,11 @@
 ---
+<<<<<<< HEAD
 - name: restart sshd
   service:
     name: sshd
+=======
+- name: restart ssh
+  service:
+    name: ssh
+>>>>>>> 1b90abf07db7721c59eca7b4383d1a727f36a8a4
     state: restarted
