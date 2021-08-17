@@ -1,9 +1,5 @@
 ---
-<<<<<<< HEAD
 - hosts: assimilate
-=======
-- hosts: firstinstall
->>>>>>> 1b90abf07db7721c59eca7b4383d1a727f36a8a4
   vars:
   - ansible_ssh_user: "{{ ssh_user }}"
   - ansible_ssh_pass: "{{ ssh_pass }}"

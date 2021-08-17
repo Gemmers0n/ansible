@@ -3,10 +3,7 @@
   package:
     name: ['apt-transport-https', 'ca-certificates', 'software-properties-common', 'curl', 'gnupg2']
     state: latest
-<<<<<<< HEAD
   when: docker_enabled | bool
-=======
->>>>>>> 1b90abf07db7721c59eca7b4383d1a727f36a8a4
 
 - name: Set ansible_architecture as amd64 if it's x86_64
   set_fact:
@@ -15,7 +12,6 @@
 
 - name: Create repo
   apt_repository:
-<<<<<<< HEAD
     repo: "deb [arch={{ ansible_architecture_altname }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
     state: present
     filename: docker
@@ -33,7 +29,6 @@
   when: docker_enabled | bool
 
 - name: Install packages
-=======
     repo: "deb [arch={{ ansible_architecture_altname }}] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
     state: present
     filename: docker
@@ -54,12 +49,10 @@
 
 - name: Install packages
   #currently 2018-07-07 not working package error
->>>>>>> 1b90abf07db7721c59eca7b4383d1a727f36a8a4
   apt:
     name: ['docker-ce', 'docker-ce-cli', 'containerd.io', 'docker-compose']
     state: latest
     install_recommends: no
-<<<<<<< HEAD
     update-cache: no
   when: docker_enabled | bool
 
@@ -88,7 +81,6 @@
 ##TODO
 ##if ufw is run:
 #cretae /etc/docker/daemon.json
->>>>>>> 1b90abf07db7721c59eca7b4383d1a727f36a8a4
 #with
 #{
 #  "iptables": false

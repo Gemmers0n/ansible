@@ -14,11 +14,7 @@
 
 - name: Install packages
   package:
-<<<<<<< HEAD
     name: ['fail2ban', 'ntp', 'unattended-upgrades', 'apt-listchanges', 'iptables', 'ufw', 'ntpdate']
-=======
-    name: ['fail2ban', 'ntp', 'unattended-upgrades', 'apt-listchanges', 'iptables', 'ufw']
->>>>>>> 1b90abf07db7721c59eca7b4383d1a727f36a8a4
     state: latest
 
 - name: Set 20auto-upgrades
@@ -47,15 +43,12 @@
 - name: Allow ssh on ufw
   command: /usr/sbin/ufw allow ssh
 
-<<<<<<< HEAD
 - name: Set Timezone
   command: /usr/bin/timedatectl set-timezone "Europe/Berlin"
 
 - name: Initial time sync
   command: /usr/sbin/ntpdate -u 0.debian.pool.ntp.org
 
-=======
->>>>>>> 1b90abf07db7721c59eca7b4383d1a727f36a8a4
 - name: Start and enable ntp
   service:
     name: ntp

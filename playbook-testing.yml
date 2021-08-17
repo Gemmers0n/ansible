@@ -1,5 +1,4 @@
 ---
-<<<<<<< HEAD
 - hosts: testing
 #  strategy: free #allows paralel run of hosts and/or roles
   vars_files:
@@ -11,15 +10,6 @@
 #    - name: "sudo_pass"
 #      prompt: "Give sudo password"
 #      private: yes
-=======
-- hosts: testhosts
-  vars:
-  - ansible_become_pass: "{{ sudo_pass }}"
-  vars_prompt:
-    - name: "sudo_pass"
-      prompt: "Give sudo password"
-      private: yes
->>>>>>> 1b90abf07db7721c59eca7b4383d1a727f36a8a4
   gather_facts: true
   become: yes
   become_user: root

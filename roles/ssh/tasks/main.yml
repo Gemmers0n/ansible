@@ -4,7 +4,6 @@
     dest: /etc/ssh/sshd_config
     owner: root
     group: root
-<<<<<<< HEAD
     mode: '0644'
     validate: /usr/sbin/sshd -t -f %s
     backup: yes
@@ -18,7 +17,6 @@
     state: started
     enabled: yes
   tags: sshd
-=======
     mode: '0600'
     validate: /usr/sbin/sshd -t -f %s
     backup: yes
@@ -32,4 +30,3 @@
     state: started
     enabled: yes
   tags: ssh
->>>>>>> 1b90abf07db7721c59eca7b4383d1a727f36a8a4

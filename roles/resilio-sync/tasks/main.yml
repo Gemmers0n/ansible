@@ -3,19 +3,13 @@
   shell: dpkg --print-architecture
   register: architecture
   changed_when: architecture.rc == 1
-<<<<<<< HEAD
   when: rslsync_enabled | bool
-=======
->>>>>>> 1b90abf07db7721c59eca7b4383d1a727f36a8a4
 
 - name: Set repo key
   apt_key:
     url: https://linux-packages.resilio.com/resilio-sync/key.asc
     state: present
-<<<<<<< HEAD
   when: rslsync_enabled | bool
-=======
->>>>>>> 1b90abf07db7721c59eca7b4383d1a727f36a8a4
 
 - name: Create repo for {{ architecture.stdout }}
   apt_repository:
@@ -23,7 +17,6 @@
     state: present
     filename: resilio-sync
     update_cache: yes
-<<<<<<< HEAD
   when: rslsync_enabled | bool
 
 - name: Install packages
@@ -107,7 +100,6 @@
 
 ##TODO change log dir to /var/log/resilio-sync
 ##TODO set dir permission that gets synced
->>>>>>> 1b90abf07db7721c59eca7b4383d1a727f36a8a4
 - name: Mod config
   template:
     src: config.json.j2
@@ -119,17 +111,11 @@
   notify:
     - restart rslsync
   tags: resilio-sync
-<<<<<<< HEAD
   when: rslsync_enabled | bool
-=======
->>>>>>> 1b90abf07db7721c59eca7b4383d1a727f36a8a4
 
 - name: Make sure a service is running
   systemd:
     state: started
     name: resilio-sync
     enabled: yes
-<<<<<<< HEAD
   when: rslsync_enabled | bool
-=======
->>>>>>> 1b90abf07db7721c59eca7b4383d1a727f36a8a4
