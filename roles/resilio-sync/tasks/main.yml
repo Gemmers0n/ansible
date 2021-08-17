@@ -33,6 +33,8 @@
     path: "{{ item.value.folder }}"
     state: directory
     mode: 755
+    owner: rslsync
+    group: rslsync
   with_dict: "{{ resilio_folders }}"
   when: rslsync_enabled | bool
 
@@ -41,51 +43,53 @@
     path: "{{ resilio_storage_path }}"
     state: directory
     mode: 755
+    owner: rslsync
+    group: rslsync
   when: rslsync_enabled | bool
 
-- name: set default ACL
-  acl:
-    path: "{{ resilio_storage_path }}"
-    recursive: yes
-    entity: rslsync
-    etype: user
-    permissions: rwX
-    default: yes
-    state: present
-  when: rslsync_enabled | bool
+#- name: set default ACL
+#  acl:
+#    path: "{{ resilio_storage_path }}"
+#    recursive: yes
+#    entity: rslsync
+#    etype: user
+#    permissions: rwX
+#    default: yes
+#    state: present
+#  when: rslsync_enabled | bool
 
-- name: set ACL
-  acl:
-    path: "{{ resilio_storage_path }}"
-    recursive: yes
-    entity: rslsync
-    etype: user
-    permissions: rwX
-    state: present
-  when: rslsync_enabled | bool
+#- name: set ACL
+#  acl:
+#    path: "{{ resilio_storage_path }}"
+#    recursive: yes
+#    entity: rslsync
+#    etype: user
+#    permissions: rwX
+#    state: present
+#  when: rslsync_enabled | bool
 
-- name: set default ACL
-  acl:
-    path: "{{ item.value.folder }}"
-    recursive: yes
-    entity: rslsync
-    etype: user
-    permissions: rwX
-    default: yes
-    state: present
-  with_dict: "{{ resilio_folders }}"
-  when: rslsync_enabled | bool
+#- name: set default ACL
+#  acl:
+#    path: "{{ item.value.folder }}"
+#    recursive: yes
+#    entity: rslsync
+#    etype: user
+#    permissions: rwX
+#    default: yes
+#    state: present
+#  with_dict: "{{ resilio_folders }}"
+#  when: rslsync_enabled | bool
 
-- name: set ACL
-  acl:
-    path: "{{ item.value.folder }}"
-    recursive: yes
-    entity: rslsync
-    etype: user
-    permissions: rwX
-    state: present
-  with_dict: "{{ resilio_folders }}"
-  when: rslsync_enabled | bool
+#- name: set ACL
+#  acl:
+#    path: "{{ item.value.folder }}"
+#    recursive: yes
+#    entity: rslsync
+#    etype: user
+#    permissions: rwX
+#    state: present
+#  with_dict: "{{ resilio_folders }}"
+#  when: rslsync_enabled | bool
 
 - name: Mod config
   template:

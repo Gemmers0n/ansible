@@ -3,6 +3,7 @@
   package:
     name: ['apt-transport-https', 'ca-certificates', 'software-properties-common', 'curl', 'gnupg2']
     state: latest
+  when: docker_enabled | bool
 
 - name: Set ansible_architecture as amd64 if it's x86_64
   set_fact:
@@ -11,41 +12,43 @@
 
 - name: Create repo
   apt_repository:
-    repo: "deb [arch={{ ansible_architecture_altname }}] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+    repo: "deb [arch={{ ansible_architecture_altname }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
     state: present
     filename: docker
-    update_cache: yes
-
-
-#- name: Create repo
-#  apt_repository:
-#    repo: "deb [arch=amd64] https://download.docker.com/linux/debian/ {{ ansible_distribution_release }} stable"
-#    state: present
-#    filename: docker
-#    update_cache: yes
+    update_cache: false
+  when: docker_enabled | bool
 
 - name: Add docker repo key
   apt_key:
-    url: https://download.docker.com/linux/debian/gpg
+    url: https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg
     state: present
+  when: docker_enabled | bool
+
+- name: Update apt-get repo and cache
+  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+  when: docker_enabled | bool
 
 - name: Install packages
-  #currently 2018-07-07 not working package error
   apt:
     name: ['docker-ce', 'docker-ce-cli', 'containerd.io', 'docker-compose']
     state: latest
     install_recommends: no
-    update-cache: yes
+    update-cache: no
+  when: docker_enabled | bool
 
 - name: Set directory
   file:
-    path: /docker
+    path: "{{ docker_folder }}"
     state: directory
-    mode: 0700
+    mode: 0755
+    #TODO check if exists
+    owner: rslsync
+    group: rslsync
+  when: docker_enabled | bool
 
 ##TODO
 ##if ufw is run:
-#cretae /etc/docker/daemon.json
+#create /etc/docker/daemon.json
 #with
 #{
 #  "iptables": false
