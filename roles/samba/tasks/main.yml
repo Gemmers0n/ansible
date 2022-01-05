@@ -1,8 +1,19 @@
+- name: Distribution version
+  debug: msg="{{ ansible_distribution_version}}"
+
 - name: Install packages
   package:
     name: ['python-apt', 'samba']
     state: latest
-  when: samba_enabled | bool
+    update_cache: yes
+  when: samba_enabled | bool and ansible_distribution_version != "11"
+
+- name: Install packages
+  package:
+    name: ['samba']
+    state: latest
+    update_cache: yes
+  when: samba_enabled | bool and ansible_distribution_version == "11"
 
 - name: Create user {{ samba_user }}
   user:
@@ -54,7 +65,7 @@
     state: started
     enabled: yes
   tags: smb
-  when: samba_enabled | bool and  samba_config is changed
+  when: samba_enabled | bool and samba_config is changed
 
 #Firewall rules
 

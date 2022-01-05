@@ -28,11 +28,12 @@
   apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
   when: docker_enabled | bool
 
-- name: Install packages
-    repo: "deb [arch={{ ansible_architecture_altname }}] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
-    state: present
-    filename: docker
-    update_cache: yes
+#- name: Install packages
+#  apt_repository:
+#    repo: "deb [arch={{ ansible_architecture_altname }}] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+#    state: present
+#    filename: docker
+#    update_cache: yes
 
 
 #- name: Create repo
@@ -42,10 +43,10 @@
 #    filename: docker
 #    update_cache: yes
 
-- name: Add docker repo key
-  apt_key:
-    url: https://download.docker.com/linux/debian/gpg
-    state: present
+#- name: Add docker repo key
+#  apt_key:
+#    url: https://download.docker.com/linux/debian/gpg
+#    state: present
 
 - name: Install packages
   #currently 2018-07-07 not working package error
@@ -69,8 +70,8 @@
 ##TODO
 ##if ufw is run:
 #create /etc/docker/daemon.json
-=======
-    update-cache: yes
+#=======
+#    update-cache: yes
 
 - name: Set directory
   file:

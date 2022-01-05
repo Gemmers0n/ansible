@@ -7,6 +7,19 @@
 #    autoclean: yes
 #    autoremove: yes
 
+#sudo apt update --allow-releaseinfo-change
+#Hit:1 http://archive.raspberrypi.org/debian buster InRelease
+#Get:2 http://raspbian.raspberrypi.org/raspbian buster InRelease [15.0 kB]
+#Get:3 http://raspbian.raspberrypi.org/raspbian buster/main armhf Packages [13.0 MB]
+#Fetched 13.0 MB in 49s (264 kB/s)                                                                                                                                                                                                              
+#Reading package lists... Done
+#Building dependency tree       
+#Reading state information... Done
+#69 packages can be upgraded. Run 'apt list --upgradable' to see them.
+#N: Repository 'http://raspbian.raspberrypi.org/raspbian buster InRelease' changed its 'Suite' value from 'stable' to 'oldstable'
+
+
+
 #- name: workaround for dist-upgrade prompt
 #  shell: export DEBIAN_FRONTEND=noninteractive; apt-get -o Dpkg::Options::="--force-confnew" --assume-yes dist-upgrade
 ##  shell: export DEBIAN_FRONTEND=noninteractive

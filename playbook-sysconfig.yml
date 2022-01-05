@@ -15,11 +15,11 @@
   become_user: root
   become_method: su
   roles:
+    - mounts
     - samba
+    - resilio-sync
     - user-ansible
     - ssh
-    - sysconfig
     - tor
-    - mounts
-    - resilio-sync
+    - sysconfig
     - docker

@@ -1,5 +1,6 @@
 ---
 ##TODO make unwritable if not mounted
+##TODO chown -R rslsync:rslsync /data;find /data -type d -exec chmod 755 {} \;;find /data -type f -exec chmod 644 {} \;;setfacl -R -m u:nasreader:rwX /data;setfacl -R -d -m u:nasreader:rwX /data
 - name: Create dir
   file:
     path: "{{ mounts_path }}"
@@ -13,7 +14,7 @@
   mount:
     path: "{{ mounts_path }}"
     src: UUID="{{ mounts_uuid }}"
-    fstype: ext4
-    opts: defaults,nofail
+    fstype: xfs
+    opts: defaults,nofail,noatime
     state: mounted
   when: mounts_enabled | bool
