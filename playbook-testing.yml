@@ -15,4 +15,6 @@
   become_user: root
   become_method: su
   roles:
-    - docker
+#    - docker
+    - mounts
+#    - user-ansible

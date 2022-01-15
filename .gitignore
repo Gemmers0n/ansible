@@ -6,3 +6,4 @@ privatekey/.vault_pass
 privatekey/hosts/*
 group_vars/*.yml
 secret
+keystore/assimilate/host

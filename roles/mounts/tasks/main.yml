@@ -1,20 +1,50 @@
 ---
 ##TODO make unwritable if not mounted
 ##TODO chown -R rslsync:rslsync /data;find /data -type d -exec chmod 755 {} \;;find /data -type f -exec chmod 644 {} \;;setfacl -R -m u:nasreader:rwX /data;setfacl -R -d -m u:nasreader:rwX /data
+#- shell: echo "I've got '{{ mounts_path }}' and am not afraid to use it!"
+#  when: mounts_path is defined
+- name: Check Vars
+  set_fact:
+    skip: 'something'
+#  vars:
+#    skip: something
+#register: skip
+  when: mounts_uuid is not defined or mounts_enabled == false
+
+- name: Ansible check directory.
+  stat:
+    path: "{{ mounts_path | default('/data') }}"
+  register: my_folder
+#  when: skip is not defined
+#TODO not working for some reason
+
+- name: "echo if directory already existed"
+  debug:
+    msg: "Directory {{ mounts_path | default('/data') }} already existing"
+  when: my_folder.stat.exists and skip is not defined
+
 - name: Create dir
   file:
-    path: "{{ mounts_path }}"
+    path: "{{ mounts_path | default('/data') }}"
     owner: root
     group: root
     mode: '0755'
     state: directory
-  when: mounts_enabled | bool
+  when: my_folder.stat.exists == false and skip is not defined
 
 - name: Mount up device by UUID
   mount:
-    path: "{{ mounts_path }}"
+    path: "{{ mounts_path | default('/data') }}"
     src: UUID="{{ mounts_uuid }}"
     fstype: xfs
     opts: defaults,nofail,noatime
     state: mounted
-  when: mounts_enabled | bool
+#  when: mounts_enabled | bool and mounts_uuid is defined and skip is not defined
+  when: skip is not defined
+
+- name: Unset var
+  set_fact:
+    skip: null
+  when: skip is defined
+#  vars:
+#    skip: null

@@ -1,5 +1,10 @@
-- name: Distribution version
-  debug: msg="{{ ansible_distribution_version}}"
+- name: Check vars
+  set_fact:
+    skip: 'something'
+  when: samba_enabled == false
+
+#- name: Distribution version
+#  debug: msg="{{ ansible_distribution_version}}"
 
 - name: Install packages
   package:
@@ -20,13 +25,13 @@
     name: "{{ samba_user }}"
     create_home: no
     shell: "/bin/false"
-  when: samba_enabled | bool
+  when: samba_enabled | bool and samba_user is set
 
 - name: Get id of {{ samba_user }}
   shell: 'id -u {{ samba_user }}'
   register: samba_userid
   changed_when: false
-  when: samba_enabled | bool
+  when: samba_enabled | bool and samba_user is set
 
 - name: Create userdump of {{ samba_user }}
   copy:
@@ -37,7 +42,7 @@
     group: root
     mode: '0600'
     backup: yes
-  when: samba_enabled | bool
+  when: samba_enabled | bool and samba_user is set
 
 - name: Import userdump of {{ samba_user }}
   shell: 'pdbedit -i smbpasswd -e tdbsam'
